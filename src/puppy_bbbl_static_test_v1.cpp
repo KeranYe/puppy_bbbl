@@ -26,7 +26,7 @@ extern "C"
 
 // Define Globle Variables
 // Flag
-if_running = true;
+bool if_running = true;
 
 // Servo channel
 unsigned int ch_front_left_upper = 8;
@@ -86,7 +86,7 @@ void ros_compatible_shutdown_signal_handler(int signo)
       rc_servo_power_rail_en(0);
       rc_servo_cleanup();
       rc_dsm_cleanup();
-      rc_set_state(EXITING);
+      //rc_set_state(EXITING);
       ROS_INFO("\nReceived SIGINT Ctrl-C.");
       ros::shutdown();
     }
@@ -95,7 +95,7 @@ void ros_compatible_shutdown_signal_handler(int signo)
       rc_servo_power_rail_en(0);
       rc_servo_cleanup();
       rc_dsm_cleanup();
-      rc_set_state(EXITING);
+      //rc_set_state(EXITING);
       ROS_INFO("Received SIGTERM.");
       ros::shutdown();
     }
