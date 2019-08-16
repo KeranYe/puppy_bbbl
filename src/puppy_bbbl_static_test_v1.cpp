@@ -6,14 +6,15 @@ extern "C"
 {  
 #include "roboticscape.h"
 }
-/*
-extern "C"
-{
-#include "rc_motors.h"
-}
-*/
 
-//#include "balance_config.h"
+#include <stdio.h>
+#include <getopt.h>
+#include <stdlib.h> // for atoi
+#include <signal.h>
+#include <rc/time.h>
+#include <rc/adc.h>
+#include <rc/dsm.h>
+#include <rc/servo.h>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "geometry_msgs/Twist.h"
@@ -22,8 +23,6 @@ extern "C"
 
 // Define Globle Variables
 // Define velocity
-//float linear_premap = 0;
-//float angular_premap = 0;
 float x_max = 1;
 float z_max = 1;
 
@@ -33,12 +32,6 @@ unsigned int RightChannel  = 2;
 float LeftDuty = 0;
 float RightDuty = 0;
 
-/*
-float median_duty = 0;
-float differential_duty = 0;
-float median_duty_max = 0.6;
-float diff_duty_max = 0.4;
-*/
 
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -51,8 +44,6 @@ void drive_Callback(const psr_msgs::PSR_Drive::ConstPtr& psr_drive_msg)
   // assign the commands if the array is of the correct length
   LeftDuty = psr_drive_msg->duty_left_des;
   RightDuty = psr_drive_msg->duty_right_des;
-  //LeftDuty = cmd_vel_twist->linear.x;
-  //RightDuty  = cmd_vel_twist->angular.z;
 
 //  time_last_good_ros_command_sec = ros::Time::now().toSec();
   ROS_INFO("Left Duty, Right Duty= %1.2f %1.2f %1.2f" , LeftDuty, RightDuty);
@@ -68,36 +59,6 @@ void drive_Callback(const psr_msgs::PSR_Drive::ConstPtr& psr_drive_msg)
         RightDuty = 0;
 	ROS_INFO("RightDuty lower bound excessed!");
    }
-
-/*
-// 2. Map linear_premap to median_duty in the range of [0, median_duty_max];
-   median_duty = median_duty_max * linear_premap / x_max;
- 
-// 3. limit angular_prremap to [-z_max, z_max];
-   if( angular_premap > z_max ){
-        angular_premap = z_max;
-        ROS_INFO("Angular velocity upper bound excessed!");
-   }
-   if( angular_premap < (-1.0)*z_max ){
-        angular_premap = (-1.0)*z_max;
-        ROS_INFO("Angular velocity lower bound excessed!");
-   }
-// 4. Map angular_premap to differential_duty in range of [-diff_duty_max, diff_duty_max];
-   differential_duty = 2.0 * diff_duty_max * (angular_premap + z_max) / (2.0 * z_max) - diff_duty_max;
-// 5. Map LeftDuty = median_duty + differential_duty & RightDuty = median_duty - differential_duty
-   LeftDuty = median_duty + differential_duty;
-   RightDuty = median_duty - differential_duty;
-//   rc_set_motor(LeftChannel, LeftDuty);
-//   rc_set_motor(RightChannel, RightDuty);
-*/
-//   ROS_INFO("Left Duty = %1.2f , Right Duty = %1.2f" , LeftDuty, RightDuty);
-/*
-//  Test Motors
-   rc_set_state(RUNNING);
-   rc_set_motor(1, 0.2);
-   rc_set_motor(4, 0.2);  
-   return;
-*/
 }
 
 void ros_compatible_shutdown_signal_handler(int signo)
@@ -141,8 +102,6 @@ int main(int argc, char **argv)
   signal(SIGINT,  ros_compatible_shutdown_signal_handler);	
   signal(SIGTERM, ros_compatible_shutdown_signal_handler);	
 
-  // rc_set_motor function test
-//  rc_set_state(RUNNING);
 
 //  initialize_motors();
   rc_enable_motors();
