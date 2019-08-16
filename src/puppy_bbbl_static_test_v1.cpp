@@ -41,7 +41,7 @@ unsigned int ch_front_right_lower = 3;
 unsigned int ch_rear_right_upper = 2;
 unsigned int ch_rear_right_lower = 1;
 
-// Servo positions [-pi/2, pi/2]
+// Servo positions [-pi/2, pi/2] or [-1, 1]
 float pos_front_left_upper = 0;
 float pos_front_left_lower = 0;
 
@@ -104,7 +104,7 @@ void ros_compatible_shutdown_signal_handler(int signo)
 
 int main(int argc, char **argv)
 {
-  unsigned int call_back_queue_len = 1;
+  unsigned int call_back_queue_len = 10;
   ros::init(argc, argv, "puppy_pos");
 
   ros::NodeHandle n;
