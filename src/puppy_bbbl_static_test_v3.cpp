@@ -94,6 +94,7 @@ void ros_compatible_shutdown_signal_handler(int signo)
 {
   if (signo == SIGINT)
     {
+      if_running = false;
       rc_servo_power_rail_en(0);
       rc_servo_cleanup();
       rc_dsm_cleanup();
@@ -103,6 +104,7 @@ void ros_compatible_shutdown_signal_handler(int signo)
     }
   else if (signo == SIGTERM)
     {
+      if_running = false;
       rc_servo_power_rail_en(0);
       rc_servo_cleanup();
       rc_dsm_cleanup();
@@ -114,7 +116,8 @@ void ros_compatible_shutdown_signal_handler(int signo)
 
 
 int main(int argc, char **argv)
-{
+{	
+	int frequency_hz = 50;
   	unsigned int index = 0;
   	unsigned int call_back_queue_len = 10;
 	unsigned int loop_rate = 10;
@@ -167,10 +170,10 @@ int main(int argc, char **argv)
 
   ros::Rate r(loop_rate);  //100 hz
   index = 0;
-  while(ros::ok()){
+  while(if_running){
 	//rc_enable_motors();
 	// send pulse
-
+	ROS_INFO("Running!!!");
 	pos_front_left_upper = pos_list[index];
 	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
@@ -188,9 +191,9 @@ int main(int argc, char **argv)
 	index = index + 1;
 	if(index > 39) index = 0;
 	  
-	ros::spinOnce();
-	r.sleep();
-//	rc_usleep(10000);
+//	ros::spinOnce();
+//	r.sleep();
+	rc_usleep(1000000/frequency_hz);
 
 }
 
