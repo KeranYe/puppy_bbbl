@@ -67,17 +67,17 @@ void pos_Callback(const psr_msgs::Puppy_pos::ConstPtr& puppy_pos_msg)
   pos_rear_right_upper = puppy_pos_msg->pos_rear_right_upper_des;
   pos_rear_right_lower = puppy_pos_msg->pos_rear_right_lower_des;
   
-  if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return;
+  if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return;
 	
-  if(rc_servo_send_pulse_normalized(ch_rear_left_upper,pos_rear_left_upper)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_rear_left_lower,pos_rear_left_lower)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_rear_left_upper,pos_rear_left_upper)==-1) return;
+  if(rc_servo_send_pulse_normalized(ch_rear_left_lower,pos_rear_left_lower)==-1) return;
 	
-  if(rc_servo_send_pulse_normalized(ch_front_right_upper,pos_front_right_upper)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_front_right_lower,pos_front_right_lower)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_front_right_upper,pos_front_right_upper)==-1) return;
+  if(rc_servo_send_pulse_normalized(ch_front_right_lower,pos_front_right_lower)==-1) return;
 	
-  if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return;
+  if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return;
 }
 
 void ros_compatible_shutdown_signal_handler(int signo)
