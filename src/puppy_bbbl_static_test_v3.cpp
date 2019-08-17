@@ -31,20 +31,26 @@ unsigned int ch_rear_right_upper = 2;
 unsigned int ch_rear_right_lower = 1;
 
 // Servo positions [-pi/2, pi/2] or [-1, 1]
-float pos_front_left_upper = 0;
-float pos_front_left_lower = 0;
+double pos_front_left_upper = 0;
+double pos_front_left_lower = 0;
 
-float pos_rear_left_upper = 0;
-float pos_rear_left_lower = 0;
+double pos_rear_left_upper = 0;
+double pos_rear_left_lower = 0;
 
-float pos_front_right_upper = 0;
-float pos_front_right_lower = 0;
+double pos_front_right_upper = 0;
+double pos_front_right_lower = 0;
 
-float pos_rear_right_upper = 0;
-float pos_rear_right_lower = 0;
+double pos_rear_right_upper = 0;
+double pos_rear_right_lower = 0;
 
 // Position limits
-float POS_MAX = M_PI/2.0;
+double POS_MAX = M_PI/2.0;
+
+// Pos waypoint list
+double pos_list[40]={0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, \
+		     1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, \
+		     0.0,-0.1,-0.2,-0.3,-0.4,-0.5,-0.6,-0.7,-0.8,-0.9, \
+		    -1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1};
 
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -55,6 +61,7 @@ void pos_Callback(const psr_msgs::Puppy_pos::ConstPtr& puppy_pos_msg)
 {
   ROS_INFO("Message received!!!");
   // assign the commands if the array is of the correct length
+/*
   pos_front_left_upper = puppy_pos_msg->pos_front_left_upper_des;
   pos_front_left_lower = puppy_pos_msg->pos_front_left_lower_des;
   
@@ -78,6 +85,7 @@ void pos_Callback(const psr_msgs::Puppy_pos::ConstPtr& puppy_pos_msg)
 	
   if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return;
   if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return;
+ */
 }
 
 void ros_compatible_shutdown_signal_handler(int signo)
@@ -105,15 +113,31 @@ void ros_compatible_shutdown_signal_handler(int signo)
 
 int main(int argc, char **argv)
 {
-  unsigned int call_back_queue_len = 10;
-  ros::init(argc, argv, "puppy_pos");
-
-  ros::NodeHandle n;
-
-  ros::Subscriber sub = n.subscribe("/PUPPY/pos", call_back_queue_len, pos_Callback);
+  	unsigned int index = 0;
+  	unsigned int call_back_queue_len = 10;
+	unsigned int loop_rate = 10;
+	char yes_or_no = 'n';
+	while(1){	
+		yes_or_no = 'n'
+		if_running = true;		
+		cout << "Please enter Looping Rate (int, default = 10): ";
+		cin >> loop_rate;
+		cout << "Please enter Call Back Queue Length (int, default = 10): ";
+		cin >> call_back_queue_len;
+		cout << "Correct input for Looping rate = " << loop_rate \
+			<< " and Queue Length = " << call_back_queue_len << "?(y/n)";
+		cin >> yes_or_no;		
+		if(yes_or_no == 'y') break;
+	}
 	
-  signal(SIGINT,  ros_compatible_shutdown_signal_handler);	
-  signal(SIGTERM, ros_compatible_shutdown_signal_handler);
+  	ros::init(argc, argv, "puppy_pos");
+
+  	ros::NodeHandle n;
+
+  	ros::Subscriber sub = n.subscribe("/PUPPY/pos", call_back_queue_len, pos_Callback);
+	
+  	signal(SIGINT,  ros_compatible_shutdown_signal_handler);	
+  	signal(SIGTERM, ros_compatible_shutdown_signal_handler);
 	
 /*
   if(rc_initialize()<0){
@@ -139,11 +163,14 @@ int main(int argc, char **argv)
   printf("Turning On 6V Servo Power Rail\n");
   rc_servo_power_rail_en(1);
 
-  ros::Rate r(100);  //100 hz
+  ros::Rate r(loop_rate);  //100 hz
+  index = 0;
   while(ros::ok()){
 	//rc_enable_motors();
 	// send pulse
-/*
+
+	pos_front_left_upper = pos_list[index];
+	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
 	
@@ -155,7 +182,10 @@ int main(int argc, char **argv)
 	
 	if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
-*/	
+	
+	index = index + 1;
+	if(index > 39) index = 0;
+	  
 	ros::spinOnce();
 	r.sleep();
 //	rc_usleep(10000);
