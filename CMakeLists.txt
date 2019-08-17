@@ -140,6 +140,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/puppy_bbbl_node.cpp)
 add_executable(${PROJECT_NAME}_static_test_v1 src/puppy_bbbl_static_test_v1.cpp)
+add_executable(${PROJECT_NAME}_static_test_v2 src/puppy_bbbl_static_test_v2.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -151,12 +152,16 @@ add_executable(${PROJECT_NAME}_static_test_v1 src/puppy_bbbl_static_test_v1.cpp)
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_static_test_v1 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_static_test_v2 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(${PROJECT_NAME}_static_test_v1 roboticscape
+   ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_static_test_v2 roboticscape
    ${catkin_LIBRARIES}
 )
 
