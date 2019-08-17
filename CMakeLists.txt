@@ -141,6 +141,7 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/puppy_bbbl_node.cpp)
 add_executable(${PROJECT_NAME}_static_test_v1 src/puppy_bbbl_static_test_v1.cpp)
 add_executable(${PROJECT_NAME}_static_test_v2 src/puppy_bbbl_static_test_v2.cpp)
+add_executable(${PROJECT_NAME}_static_test_v3 src/puppy_bbbl_static_test_v3.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -153,6 +154,7 @@ add_executable(${PROJECT_NAME}_static_test_v2 src/puppy_bbbl_static_test_v2.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_static_test_v1 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_static_test_v2 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_static_test_v3 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -162,6 +164,9 @@ target_link_libraries(${PROJECT_NAME}_static_test_v1 roboticscape
    ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_static_test_v2 roboticscape
+   ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_static_test_v3 roboticscape
    ${catkin_LIBRARIES}
 )
 
