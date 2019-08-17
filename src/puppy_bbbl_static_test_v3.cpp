@@ -168,13 +168,14 @@ int main(int argc, char **argv)
   printf("Turning On 6V Servo Power Rail\n");
   rc_servo_power_rail_en(1);
 
-  ros::Rate r(loop_rate);  //100 hz
+  //ros::Rate r(loop_rate);  //100 hz
   index = 0;
   while(if_running){
 	//rc_enable_motors();
 	// send pulse
 	ROS_INFO("Running!!!");
 	pos_front_left_upper = pos_list[index];
+	pos_front_left_lower = pos_list[index];
 	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
