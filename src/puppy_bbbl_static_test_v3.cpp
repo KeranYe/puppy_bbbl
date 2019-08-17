@@ -129,8 +129,11 @@ int main(int argc, char **argv)
 		cin >> loop_rate;
 		cout << "Please enter Call Back Queue Length (int, default = 10): ";
 		cin >> call_back_queue_len;
+		cout << "Please enter RC Frequency (int, default = 50): ";
+		cin >> frequency_hz;
 		cout << "Correct input for Looping rate = " << loop_rate \
-			<< " and Queue Length = " << call_back_queue_len << "?(y/n)";
+			<< " and Queue Length = " << call_back_queue_len \
+			<< " Freq = " << frequency_hz << "?(y/n)";
 		cin >> yes_or_no;		
 		if(yes_or_no == 'y') break;
 	}
@@ -175,7 +178,8 @@ int main(int argc, char **argv)
 	// send pulse
 	ROS_INFO("Running!!!");
 	pos_front_left_upper = pos_list[index];
-	pos_front_left_lower = pos_list[index];
+	//pos_front_left_lower = pos_list[index];
+	pos_rear_left_upper = pos_list[index];
 	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
@@ -204,6 +208,7 @@ int main(int argc, char **argv)
    * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
    */
 //  ros::spin();
+rc_usleep(50000);
 // turn off power rail and cleanup
   rc_servo_power_rail_en(0);
   rc_servo_cleanup();
