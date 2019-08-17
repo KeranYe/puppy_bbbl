@@ -12,6 +12,8 @@
 #include "geometry_msgs/Twist.h"
 #include "unistd.h"
 #include <psr_msgs/Puppy_pos.h>
+#include <iostream>
+using namespace std;
 
 // Define Globle Variables
 // Flag
@@ -118,7 +120,7 @@ int main(int argc, char **argv)
 	unsigned int loop_rate = 10;
 	char yes_or_no = 'n';
 	while(1){	
-		yes_or_no = 'n'
+		yes_or_no = 'n';
 		if_running = true;		
 		cout << "Please enter Looping Rate (int, default = 10): ";
 		cin >> loop_rate;
