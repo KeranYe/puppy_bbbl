@@ -49,10 +49,14 @@ double pos_rear_right_lower = 0;
 double POS_MAX = M_PI/2.0;
 
 // Pos waypoint list
-double pos_list[40]={0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, \
+double pos_list_1[40]={0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, \
 		     1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, \
 		     0.0,-0.1,-0.2,-0.3,-0.4,-0.5,-0.6,-0.7,-0.8,-0.9, \
 		    -1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1};
+double pos_list_2[40]={0.0, 0.2, 0.4, 0.6, 0.8, \
+		     1.0, 0.8, 0.6, 0.4, 0.2, \
+		     0.0,-0.2,-0.4,-0.6,-0.8, \
+		    -1.0,-0.8,-0.6,-0.4,-0.2};
 
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -177,9 +181,9 @@ int main(int argc, char **argv)
 	//rc_enable_motors();
 	// send pulse
 	ROS_INFO("Running!!!");
-	pos_front_left_upper = pos_list[index];
+	pos_front_left_upper = pos_list_2[index];
 	//pos_front_left_lower = pos_list[index];
-	pos_rear_left_upper = pos_list[index];
+	pos_rear_left_upper = pos_list_2[index];
 	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
