@@ -134,7 +134,7 @@ int main(int argc, char **argv)
   	unsigned int call_back_queue_len = 10;
 	unsigned int loop_rate = 50;
 	char yes_or_no = 'n';
-	int step_size = 1;
+	double step_size = 1;
 	unsigned int counter = 1;
 	
 	while(1){	
@@ -215,7 +215,7 @@ int main(int argc, char **argv)
 
   ros::Rate r(loop_rate);  //100 hz
   index = 0;
-  servo_pos = 1;
+  servo_pos = 0;
   double increment = step_size * sweep_limit / frequency_hz;
   while(if_running){
 	//rc_enable_motors();
