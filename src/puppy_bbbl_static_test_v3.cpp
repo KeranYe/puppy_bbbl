@@ -197,8 +197,10 @@ int main(int argc, char **argv)
 //  pos_rear_left_upper = 0;
 //  pos_front_right_upper = 0;
 //  pos_rear_right_upper = 0;
-  for(int i = 0; i < 10; ++i)
-	if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;	
+  for(int i = 0; i < 10; ++i){
+	if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
+	rc_usleep(duration/frequency_hz);
+  }
 	
  while(1){
 	  char robot_go = 'n';
