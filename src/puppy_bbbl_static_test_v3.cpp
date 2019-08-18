@@ -57,6 +57,10 @@ double pos_list_2[20]={0.0, 0.2, 0.4, 0.6, 0.8, \
 		     1.0, 0.8, 0.6, 0.4, 0.2, \
 		     0.0,-0.2,-0.4,-0.6,-0.8, \
 		    -1.0,-0.8,-0.6,-0.4,-0.2};
+double pos_list_3[12]={0.0, 0.4, 0.8, \
+		     1.0, 0.8, 0.4, \
+		     0.0,-0.4,-0.8, \
+		    -1.0,-0.8,-0.4};
 
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -181,9 +185,9 @@ int main(int argc, char **argv)
 	//rc_enable_motors();
 	// send pulse
 	ROS_INFO("Running!!!");
-	pos_front_left_upper = pos_list_2[index];
+	pos_front_left_upper = pos_list_3[index];
 	//pos_front_left_lower = pos_list[index];
-	pos_rear_left_upper = pos_list_2[index];
+	pos_rear_left_upper = pos_list_3[index];
 	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
@@ -198,7 +202,7 @@ int main(int argc, char **argv)
 	if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
 	
 	index = index + 1;
-	if(index > 19) index = 0;
+	if(index > 11) index = 0;
 	  
 //	ros::spinOnce();
 //	r.sleep();
