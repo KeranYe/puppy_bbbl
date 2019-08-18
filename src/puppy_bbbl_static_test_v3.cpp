@@ -197,7 +197,8 @@ int main(int argc, char **argv)
 //  pos_rear_left_upper = 0;
 //  pos_front_right_upper = 0;
 //  pos_rear_right_upper = 0;
-  for(int i = 0; i < frequency_hz; ++i){
+  for(int i = 0; i < 10*frequency_hz; ++i){
+	ROS_INFO("Initializing!!!");
 	if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
 	rc_usleep(duration/frequency_hz);
   }
@@ -220,7 +221,7 @@ int main(int argc, char **argv)
 	//rc_enable_motors();
 	// send pulse
 	ROS_INFO("Running!!!");
-/*
+
 	servo_pos += direction * increment;
         // reset pulse width at end of sweep
 	if(servo_pos>sweep_limit){
@@ -231,7 +232,7 @@ int main(int argc, char **argv)
 		servo_pos = -sweep_limit;
 		direction = 1;
 	}
-*/
+
 	pos_front_left_upper = servo_pos;
 	pos_rear_left_upper = -servo_pos;
 	pos_front_right_upper = servo_pos;
@@ -251,13 +252,13 @@ int main(int argc, char **argv)
 	
 	if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
-	
+/*	
 	counter = counter + 1;
 	if(counter > frequency_hz/step_size){ 
 		counter = 1;
 		servo_pos = -servo_pos; 
 	}
-
+*/
 	ros::spinOnce();
 	r.sleep();
 //	rc_usleep(duration/frequency_hz);
