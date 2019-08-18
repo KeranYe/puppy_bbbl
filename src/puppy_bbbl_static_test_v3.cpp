@@ -127,7 +127,9 @@ int main(int argc, char **argv)
 {	
 	unsigned int duration = 1000000;
 	double servo_pos = 0.0;
+	double servo_pos_l = 0.0;
 	double sweep_limit = 1.0;
+	double sweep_limit_l = 1.0;
 	double direction = 1.0;
 	int frequency_hz = 50;
   	unsigned int index = 0;
@@ -217,11 +219,13 @@ int main(int argc, char **argv)
   index = 0;
   servo_pos = 0;
   double increment = step_size * sweep_limit / frequency_hz;
+  double increment_l = step_size * sweep_limit_l / frequency_hz;
   while(if_running){
 	//rc_enable_motors();
 	// send pulse
 	
 	servo_pos += direction * increment;
+	servo_pos_l += direction * increment_l;
         // reset pulse width at end of sweep
 	if(servo_pos>sweep_limit){
         	servo_pos = sweep_limit;
@@ -231,12 +235,26 @@ int main(int argc, char **argv)
 		servo_pos = -sweep_limit;
 		direction = 1;
 	}
+	
+	if(servo_pos_l>sweep_limit_l){
+        	servo_pos_l = sweep_limit_l;
+		direction = -1;
+	}
+	else if(servo_pos_l < 0){
+		servo_pos_l = 0;
+		direction = 1;
+	}
+	
 	ROS_INFO("Running!!! Servo pos = %f", servo_pos);
 	  
 	pos_front_left_upper = servo_pos;
 	pos_rear_left_upper = -servo_pos;
 	pos_front_right_upper = servo_pos;
 	pos_rear_right_upper = -servo_pos;
+	pos_front_left_lower = servo_pos_l;
+	pos_rear_left_lower = -servo_pos_l;
+	pos_front_right_lower = servo_pos_l;
+	pos_rear_right_lower = -servo_pos_l;
 	//pos_front_left_upper = pos_list_3[index];
 	//pos_front_left_lower = pos_list[index];
 	//pos_rear_left_upper = pos_list_3[index];
