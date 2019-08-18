@@ -214,6 +214,7 @@ int main(int argc, char **argv)
 
   //ros::Rate r(loop_rate);  //100 hz
   index = 0;
+  servo_pos = 0;
   double increment = sweep_limit / frequency_hz;
   while(if_running){
 	//rc_enable_motors();
@@ -229,8 +230,8 @@ int main(int argc, char **argv)
 		servo_pos = -sweep_limit;
 		direction = 1;
 	}
-//	pos_front_left_upper = servo_pos;
-//	pos_rear_left_upper = -servo_pos;
+	pos_front_left_upper = servo_pos;
+	pos_rear_left_upper = -servo_pos;
 	pos_front_right_upper = servo_pos;
 	pos_rear_right_upper = -servo_pos;
 	//pos_front_left_upper = pos_list_3[index];
