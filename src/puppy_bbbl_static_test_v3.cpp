@@ -134,21 +134,26 @@ int main(int argc, char **argv)
   	unsigned int call_back_queue_len = 10;
 	unsigned int loop_rate = 10;
 	char yes_or_no = 'n';
+	double step_size = 1;
+	
 	while(1){	
 		yes_or_no = 'n';
 		if_running = true;		
-		cout << "Please enter Looping Rate (int, default = 10): ";
-		cin >> loop_rate;
-		cout << "Please enter Call Back Queue Length (int, default = 10): ";
-		cin >> call_back_queue_len;
+//		cout << "Please enter Looping Rate (int, default = 10): ";
+//		cin >> loop_rate;
+//		cout << "Please enter Call Back Queue Length (int, default = 10): ";
+//		cin >> call_back_queue_len;
 		cout << "Please enter RC Frequency (int, default = 50): ";
 		cin >> frequency_hz;
 		cout << "Please enter Swing Duration (int, default = 1000000): ";
 		cin >> duration;
+		cout << "Please enter Step Size (int, default = 1): ";
+		cin >> step_size;
 		cout << "Correct input for Looping rate = " << loop_rate \
 			<< " and Queue Length = " << call_back_queue_len \
 			<< " Freq = " << frequency_hz \
-			<< " Swing Duration = " << duration << "?(y/n)";
+			<< " Swing Duration = " << duration \
+			<< " Step Size = " << step_size << "?(y/n)";
 		cin >> yes_or_no;		
 		if(yes_or_no == 'y') break;
 	}
@@ -215,7 +220,7 @@ int main(int argc, char **argv)
   //ros::Rate r(loop_rate);  //100 hz
   index = 0;
   servo_pos = 0;
-  double increment = sweep_limit / frequency_hz;
+  double increment = step_size * sweep_limit / frequency_hz;
   while(if_running){
 	//rc_enable_motors();
 	// send pulse
