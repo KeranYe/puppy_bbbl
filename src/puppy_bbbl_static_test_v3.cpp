@@ -204,7 +204,9 @@ int main(int argc, char **argv)
 		direction = 1;
 	}
 	pos_front_left_upper = servo_pos;
-	pos_rear_left_upper = servo_pos;
+	pos_rear_left_upper = -servo_pos;
+	pos_front_right_upper = servo_pos;
+	pos_rear_right_upper = -servo_pos;
 	//pos_front_left_upper = pos_list_3[index];
 	//pos_front_left_lower = pos_list[index];
 	//pos_rear_left_upper = pos_list_3[index];
