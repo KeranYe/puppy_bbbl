@@ -134,7 +134,8 @@ int main(int argc, char **argv)
   	unsigned int call_back_queue_len = 10;
 	unsigned int loop_rate = 10;
 	char yes_or_no = 'n';
-	double step_size = 1;
+	int step_size = 1;
+	unsigned int counter = 1;
 	
 	while(1){	
 		yes_or_no = 'n';
@@ -205,17 +206,7 @@ int main(int argc, char **argv)
 	  	if(robot_go == 'n') return -1;
   }	
 	
-  if(rc_servo_send_pulse_normalized(ch_front_left_upper,0)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_front_left_lower,0)==-1) return -1;
-	
-  if(rc_servo_send_pulse_normalized(ch_rear_left_upper,0)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_rear_left_lower,0)==-1) return -1;
-	
-  if(rc_servo_send_pulse_normalized(ch_front_right_upper,0)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_front_right_lower,0)==-1) return -1;
-	
-  if(rc_servo_send_pulse_normalized(ch_rear_right_upper,0)==-1) return -1;
-  if(rc_servo_send_pulse_normalized(ch_rear_right_lower,0)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
 
   //ros::Rate r(loop_rate);  //100 hz
   index = 0;
@@ -257,14 +248,15 @@ int main(int argc, char **argv)
 	if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
 	
-//	index = index + 1;
-//	if(index > 11) index = 0;
-	
-	servo_pos = -servo_pos; 
+	counter = counter + 1;
+	if(counter > frequency_hz/step_size){ 
+		counter = 1;
+		servo_pos = -servo_pos; 
+	}
 //	ros::spinOnce();
 //	r.sleep();
-//	rc_usleep(duration/frequency_hz);
-	rc_usleep(duration);
+	rc_usleep(duration/frequency_hz);
+
 
 }
 
