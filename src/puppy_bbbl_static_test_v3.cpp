@@ -186,6 +186,32 @@ int main(int argc, char **argv)
   printf("Turning On 6V Servo Power Rail\n");
   rc_servo_power_rail_en(1);
 
+  // Set initial states for all legs
+//  pos_front_left_upper = 0;
+//  pos_rear_left_upper = 0;
+//  pos_front_right_upper = 0;
+//  pos_rear_right_upper = 0;
+	
+  if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
+	
+  if(rc_servo_send_pulse_normalized(ch_rear_left_upper,pos_rear_left_upper)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_rear_left_lower,pos_rear_left_lower)==-1) return -1;
+	
+  if(rc_servo_send_pulse_normalized(ch_front_right_upper,pos_front_right_upper)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_front_right_lower,pos_front_right_lower)==-1) return -1;
+	
+  if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return -1;
+  if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
+	
+  while(1){
+	  char robot_go = 'n';
+	  cout << "Run robot? (y/n): ";
+	  cin >> robot_go;		
+		if(robot_go == 'y') break;
+	  	if(robot_go == 'n') return -1;
+  }
+
   //ros::Rate r(loop_rate);  //100 hz
   index = 0;
   double increment = sweep_limit / frequency_hz;
@@ -203,10 +229,10 @@ int main(int argc, char **argv)
 		servo_pos = -sweep_limit;
 		direction = 1;
 	}
-	pos_front_left_upper = servo_pos;
-	pos_rear_left_upper = -servo_pos;
-//	pos_front_right_upper = servo_pos;
-//	pos_rear_right_upper = -servo_pos;
+//	pos_front_left_upper = servo_pos;
+//	pos_rear_left_upper = -servo_pos;
+	pos_front_right_upper = servo_pos;
+	pos_rear_right_upper = -servo_pos;
 	//pos_front_left_upper = pos_list_3[index];
 	//pos_front_left_lower = pos_list[index];
 	//pos_rear_left_upper = pos_list_3[index];
