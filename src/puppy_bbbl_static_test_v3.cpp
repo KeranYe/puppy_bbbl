@@ -131,6 +131,7 @@ int main(int argc, char **argv)
 	double sweep_limit = 1.0;
 	double sweep_limit_l = 1.0;
 	double direction = 1.0;
+	double direction_l = 1.0;
 	int frequency_hz = 50;
   	unsigned int index = 0;
   	unsigned int call_back_queue_len = 10;
@@ -218,6 +219,7 @@ int main(int argc, char **argv)
   ros::Rate r(loop_rate);  //100 hz
   index = 0;
   servo_pos = 0;
+  servo_pos_l = 0;
   double increment = step_size * sweep_limit / frequency_hz;
   double increment_l = step_size * sweep_limit_l / frequency_hz;
   while(if_running){
@@ -225,7 +227,7 @@ int main(int argc, char **argv)
 	// send pulse
 	
 	servo_pos += direction * increment;
-	servo_pos_l += direction * increment_l;
+	servo_pos_l += direction_l * increment_l;
         // reset pulse width at end of sweep
 	if(servo_pos>sweep_limit){
         	servo_pos = sweep_limit;
@@ -238,11 +240,11 @@ int main(int argc, char **argv)
 	
 	if(servo_pos_l>sweep_limit_l){
         	servo_pos_l = sweep_limit_l;
-		direction = -1;
+		direction_l = -1;
 	}
 	else if(servo_pos_l < 0){
 		servo_pos_l = 0;
-		direction = 1;
+		direction_l = 1;
 	}
 	
 	ROS_INFO("Running!!! Servo pos = %f", servo_pos);
