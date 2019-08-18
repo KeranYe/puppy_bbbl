@@ -125,6 +125,10 @@ void ros_compatible_shutdown_signal_handler(int signo)
 
 int main(int argc, char **argv)
 {	
+	unsigned int duration = 1000000;
+	double servo_pos = 0.0;
+	double sweep_limit = 1.0;
+	double direction = 1.0;
 	int frequency_hz = 50;
   	unsigned int index = 0;
   	unsigned int call_back_queue_len = 10;
@@ -139,9 +143,12 @@ int main(int argc, char **argv)
 		cin >> call_back_queue_len;
 		cout << "Please enter RC Frequency (int, default = 50): ";
 		cin >> frequency_hz;
+		cout << "Please enter Swing Duration (int, default = 1000000): ";
+		cin >> duration;
 		cout << "Correct input for Looping rate = " << loop_rate \
 			<< " and Queue Length = " << call_back_queue_len \
-			<< " Freq = " << frequency_hz << "?(y/n)";
+			<< " Freq = " << frequency_hz \
+			<< " Swing Duration = " << duration << "?(y/n)";
 		cin >> yes_or_no;		
 		if(yes_or_no == 'y') break;
 	}
@@ -181,13 +188,26 @@ int main(int argc, char **argv)
 
   //ros::Rate r(loop_rate);  //100 hz
   index = 0;
+  double increment = sweep_limit / frequency_hz;
   while(if_running){
 	//rc_enable_motors();
 	// send pulse
 	ROS_INFO("Running!!!");
-	pos_front_left_upper = pos_list_3[index];
+	servo_pos += direction * increment;
+        // reset pulse width at end of sweep
+	if(servo_pos>sweep_limit){
+        	servo_pos = sweep_limit;
+		direction = -1;
+	}
+	else if(servo_pos < (-sweep_limit)){
+		servo_pos = -sweep_limit;
+		direction = 1;
+	}
+	pos_front_left_upper = servo_pos;
+	pos_rear_left_upper = servo_pos;
+	//pos_front_left_upper = pos_list_3[index];
 	//pos_front_left_lower = pos_list[index];
-	pos_rear_left_upper = pos_list_3[index];
+	//pos_rear_left_upper = pos_list_3[index];
 	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
@@ -206,7 +226,7 @@ int main(int argc, char **argv)
 	  
 //	ros::spinOnce();
 //	r.sleep();
-	rc_usleep(1000000/frequency_hz);
+	rc_usleep(duration/frequency_hz);
 
 }
 
