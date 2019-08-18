@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 	int frequency_hz = 50;
   	unsigned int index = 0;
   	unsigned int call_back_queue_len = 10;
-	unsigned int loop_rate = 10;
+	unsigned int loop_rate = 50;
 	char yes_or_no = 'n';
 	int step_size = 1;
 	unsigned int counter = 1;
@@ -140,8 +140,8 @@ int main(int argc, char **argv)
 	while(1){	
 		yes_or_no = 'n';
 		if_running = true;		
-//		cout << "Please enter Looping Rate (int, default = 10): ";
-//		cin >> loop_rate;
+		cout << "Please enter Looping Rate (int, default = 50): ";
+		cin >> loop_rate;
 //		cout << "Please enter Call Back Queue Length (int, default = 10): ";
 //		cin >> call_back_queue_len;
 		cout << "Please enter RC Frequency (int, default = 50): ";
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 	
   if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
 
-  //ros::Rate r(loop_rate);  //100 hz
+  ros::Rate r(loop_rate);  //100 hz
   index = 0;
   servo_pos = 1;
   double increment = step_size * sweep_limit / frequency_hz;
@@ -253,9 +253,10 @@ int main(int argc, char **argv)
 		counter = 1;
 		servo_pos = -servo_pos; 
 	}
-//	ros::spinOnce();
-//	r.sleep();
-	rc_usleep(duration/frequency_hz);
+
+	ros::spinOnce();
+	r.sleep();
+//	rc_usleep(duration/frequency_hz);
 
 
 }
