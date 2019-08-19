@@ -46,6 +46,7 @@ double pos_front_right_lower = 0;
 double pos_rear_right_upper = 0;
 double pos_rear_right_lower = 0;
 */
+/*
 int pos_front_left_upper = 15000;
 int pos_front_left_lower = 15000;
 
@@ -57,7 +58,7 @@ int pos_front_right_lower = 15000;
 
 int pos_rear_right_upper = 15000;
 int pos_rear_right_lower = 15000;
-
+*/
 // Position limits
 double POS_MAX = M_PI/2.0;
 
@@ -138,6 +139,18 @@ void ros_compatible_shutdown_signal_handler(int signo)
 
 int main(int argc, char **argv)
 {	
+	int pos_front_left_upper = 15000;
+	int pos_front_left_lower = 15000;
+
+	int pos_rear_left_upper = 15000;
+	int pos_rear_left_lower = 15000;
+
+	int pos_front_right_upper = 15000;
+	int pos_front_right_lower = 15000;
+
+	int pos_rear_right_upper = 15000;
+	int pos_rear_right_lower = 15000;
+	
 	unsigned int duration = 1000000;
 //	double servo_pos = 0.0;
 //	double servo_pos_l = 0.0;
@@ -149,8 +162,8 @@ int main(int argc, char **argv)
 	int sweep_limit_l = 20000;
 //	double direction = 1.0;
 //	double direction_l = 1.0;
-	int direction = 1.0;
-	int direction_l = 1.0;
+	int direction = 1;
+	int direction_l = 1;
 	int frequency_hz = 50;
 //	double increment = 0.02;
 //	double increment_l = 0.02;
@@ -232,7 +245,7 @@ int main(int argc, char **argv)
 //  pos_rear_left_upper = 0;
 //  pos_front_right_upper = 0;
 //  pos_rear_right_upper = 0;
-  for(int i = 0; i < 5*frequency_hz; ++i){
+  for(int i = 0; i < 10*frequency_hz; ++i){
 	ROS_INFO("Initializing!!!");
 //	if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
 	if(rc_servo_send_pulse_us(0,15000)==-1) return -1;
@@ -249,7 +262,7 @@ int main(int argc, char **argv)
 	
   
 
-  ros::Rate r(loop_rate);  //100 hz
+//  ros::Rate r(loop_rate);  //100 hz
   index = 0;
   servo_pos = 15000;
   servo_pos_l = 15000;
@@ -326,7 +339,7 @@ int main(int argc, char **argv)
 		servo_pos = -servo_pos; 
 	}
 */
-	ROS_INFO("Running!!! Servo pos = %f, Servo pos lower = %f", servo_pos, servo_pos_l);
+//	ROS_INFO("Running!!! Servo pos = %f, Servo pos lower = %f", servo_pos, servo_pos_l);
 	ROS_INFO("Running!!! Servo pos = %d, Servo pos lower = %d", servo_pos, servo_pos_l);
 //	ros::spinOnce();
 //	r.sleep();
