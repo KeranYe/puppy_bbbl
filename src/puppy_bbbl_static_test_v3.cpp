@@ -33,6 +33,7 @@ unsigned int ch_rear_right_upper = 2;
 unsigned int ch_rear_right_lower = 1;
 
 // Servo positions [-pi/2, pi/2] or [-1, 1]
+/*
 double pos_front_left_upper = 0;
 double pos_front_left_lower = 0;
 
@@ -44,6 +45,18 @@ double pos_front_right_lower = 0;
 
 double pos_rear_right_upper = 0;
 double pos_rear_right_lower = 0;
+*/
+int pos_front_left_upper = 15000;
+int pos_front_left_lower = 15000;
+
+int pos_rear_left_upper = 15000;
+int pos_rear_left_lower = 15000;
+
+int pos_front_right_upper = 15000;
+int pos_front_right_lower = 15000;
+
+int pos_rear_right_upper = 15000;
+int pos_rear_right_lower = 15000;
 
 // Position limits
 double POS_MAX = M_PI/2.0;
@@ -126,15 +139,23 @@ void ros_compatible_shutdown_signal_handler(int signo)
 int main(int argc, char **argv)
 {	
 	unsigned int duration = 1000000;
-	double servo_pos = 0.0;
-	double servo_pos_l = 0.0;
-	double sweep_limit = 1.0;
-	double sweep_limit_l = 1.0;
-	double direction = 1.0;
-	double direction_l = 1.0;
+//	double servo_pos = 0.0;
+//	double servo_pos_l = 0.0;
+	int servo_pos = 15000;
+	int servo_pos_l = 15000;
+//	double sweep_limit = 1.0;
+//	double sweep_limit_l = 1.0;
+	int sweep_limit = 20000;
+	int sweep_limit_l = 20000;
+//	double direction = 1.0;
+//	double direction_l = 1.0;
+	int direction = 1.0;
+	int direction_l = 1.0;
 	int frequency_hz = 50;
-	double increment = 0.02;
-	double increment_l = 0.02;
+//	double increment = 0.02;
+//	double increment_l = 0.02;
+	int increment = 10;
+	int increment_l = 10;
 	
   	unsigned int index = 0;
   	unsigned int call_back_queue_len = 10;
@@ -151,17 +172,17 @@ int main(int argc, char **argv)
 		cin >> loop_rate;
 //		cout << "Please enter Call Back Queue Length (int, default = 10): ";
 //		cin >> call_back_queue_len;
-		cout << "Please enter RC Frequency (int, default = 100): ";
+		cout << "Please enter RC Frequency (int, default = 50): ";
 		cin >> frequency_hz;
 		cout << "Please enter Swing Duration (int, default = 1000000): ";
 		cin >> duration;
-		cout << "Please enter Step Size (int, default = 1): ";
-		cin >> step_size;
-		cout << "Please enter Step Size L (int, default = 0.5): ";
-		cin >> step_size_l;
-		cout << "Please enter Increment (int, default = 0.02): ";
+//		cout << "Please enter Step Size (int, default = 1): ";
+//		cin >> step_size;
+//		cout << "Please enter Step Size L (int, default = 1): ";
+//		cin >> step_size_l;
+		cout << "Please enter Increment (int, default = 10): ";
 		cin >> increment;
-		cout << "Please enter Increment L (int, default = 0.02): ";
+		cout << "Please enter Increment L (int, default = 10): ";
 		cin >> increment_l;
 		cout << "Correct input for Looping rate = " << loop_rate \
 			<< " and Queue Length = " << call_back_queue_len \
@@ -211,10 +232,11 @@ int main(int argc, char **argv)
 //  pos_rear_left_upper = 0;
 //  pos_front_right_upper = 0;
 //  pos_rear_right_upper = 0;
-  for(int i = 0; i < 10*frequency_hz; ++i){
+  for(int i = 0; i < 5*frequency_hz; ++i){
 	ROS_INFO("Initializing!!!");
-	if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
-//	rc_usleep(duration/frequency_hz);
+//	if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
+	if(rc_servo_send_pulse_us(0,15000)==-1) return -1;
+	rc_usleep(duration/frequency_hz);
   }
 	
  while(1){
@@ -229,10 +251,10 @@ int main(int argc, char **argv)
 
   ros::Rate r(loop_rate);  //100 hz
   index = 0;
-  servo_pos = 0;
-  servo_pos_l = 0;
-  increment = step_size * increment;
-  increment_l = step_size_l * increment_l;
+  servo_pos = 15000;
+  servo_pos_l = 15000;
+//  increment = step_size * increment;
+//  increment_l = step_size_l * increment_l;
   while(if_running){
 	//rc_enable_motors();
 	// send pulse
@@ -240,38 +262,40 @@ int main(int argc, char **argv)
 	servo_pos += direction * increment;
 	servo_pos_l += direction_l * increment_l;
         // reset pulse width at end of sweep
-	if(servo_pos>sweep_limit){
-        	servo_pos = sweep_limit;
+	if(servo_pos>20000){
+//	if(servo_pos>sweep_limit){
+        	servo_pos = 20000;
 		direction = -1;
 	}
-	else if(servo_pos < (-sweep_limit)){
-		servo_pos = -sweep_limit;
+	else if(servo_pos < 10000){
+		servo_pos = 10000;
 		direction = 1;
 	}
 	
-	if(servo_pos_l>sweep_limit_l){
-        	servo_pos_l = sweep_limit_l;
+	if(servo_pos_l>20000){
+//	if(servo_pos_l>sweep_limit_l){
+        	servo_pos_l = 20000;
 		direction_l = -1;
 	}
-	else if(servo_pos_l < 0){
-		servo_pos_l = 0;
+	else if(servo_pos_l < 15000){
+		servo_pos_l = 15000;
 		direction_l = 1;
 	}
 	
 //	ROS_INFO("Running!!! Servo pos = %f", servo_pos);
 	  
 	pos_front_left_upper = servo_pos;
-	pos_rear_left_upper = -servo_pos;
-	pos_front_right_upper = servo_pos;
-	pos_rear_right_upper = -servo_pos;
-	pos_front_left_lower = servo_pos_l;
-	pos_rear_left_lower = -servo_pos_l;
-	pos_front_right_lower = servo_pos_l;
-	pos_rear_right_lower = -servo_pos_l;
+//	pos_rear_left_upper = -servo_pos;
+//	pos_front_right_upper = servo_pos;
+//	pos_rear_right_upper = -servo_pos;
+//	pos_front_left_lower = servo_pos_l;
+//	pos_rear_left_lower = -servo_pos_l;
+//	pos_front_right_lower = servo_pos_l;
+//	pos_rear_right_lower = -servo_pos_l;
 	//pos_front_left_upper = pos_list_3[index];
 	//pos_front_left_lower = pos_list[index];
 	//pos_rear_left_upper = pos_list_3[index];
-	  
+/*	  
 	if(rc_servo_send_pulse_normalized(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
 	
@@ -283,6 +307,18 @@ int main(int argc, char **argv)
 	
 	if(rc_servo_send_pulse_normalized(ch_rear_right_upper,pos_rear_right_upper)==-1) return -1;
 	if(rc_servo_send_pulse_normalized(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
+*/
+	if(rc_servo_send_pulse_us(ch_front_left_upper,pos_front_left_upper)==-1) return -1;
+	if(rc_servo_send_pulse_us(ch_front_left_lower,pos_front_left_lower)==-1) return -1;
+	
+	if(rc_servo_send_pulse_us(ch_rear_left_upper,pos_rear_left_upper)==-1) return -1;
+	if(rc_servo_send_pulse_us(ch_rear_left_lower,pos_rear_left_lower)==-1) return -1;
+	
+	if(rc_servo_send_pulse_us(ch_front_right_upper,pos_front_right_upper)==-1) return -1;
+	if(rc_servo_send_pulse_us(ch_front_right_lower,pos_front_right_lower)==-1) return -1;
+	
+	if(rc_servo_send_pulse_us(ch_rear_right_upper,pos_rear_right_upper)==-1) return -1;
+	if(rc_servo_send_pulse_us(ch_rear_right_lower,pos_rear_right_lower)==-1) return -1;
 /*	
 	counter = counter + 1;
 	if(counter > frequency_hz/step_size){ 
@@ -291,9 +327,9 @@ int main(int argc, char **argv)
 	}
 */
 	ROS_INFO("Running!!! Servo pos = %f, Servo pos lower = %f", servo_pos, servo_pos_l);
-	ros::spinOnce();
-	r.sleep();
-//	rc_usleep(duration/frequency_hz);
+//	ros::spinOnce();
+//	r.sleep();
+	rc_usleep(duration/frequency_hz);
 
 
 }
