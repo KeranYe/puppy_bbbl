@@ -133,12 +133,15 @@ int main(int argc, char **argv)
 	double direction = 1.0;
 	double direction_l = 1.0;
 	int frequency_hz = 50;
+	double increment = 0.02;
+	double increment_l = 0.02;
+	
   	unsigned int index = 0;
   	unsigned int call_back_queue_len = 10;
 	unsigned int loop_rate = 50;
 	char yes_or_no = 'n';
 	double step_size = 1;
-	double step_size_l = 0.5;
+	double step_size_l = 1;
 	unsigned int counter = 1;
 	
 	while(1){	
@@ -156,6 +159,10 @@ int main(int argc, char **argv)
 		cin >> step_size;
 		cout << "Please enter Step Size L (int, default = 0.5): ";
 		cin >> step_size_l;
+		cout << "Please enter Increment (int, default = 0.02): ";
+		cin >> increment;
+		cout << "Please enter Increment L (int, default = 0.02): ";
+		cin >> increment_l;
 		cout << "Correct input for Looping rate = " << loop_rate \
 			<< " and Queue Length = " << call_back_queue_len \
 			<< " Freq = " << frequency_hz \
@@ -207,7 +214,7 @@ int main(int argc, char **argv)
   for(int i = 0; i < 10*frequency_hz; ++i){
 	ROS_INFO("Initializing!!!");
 	if(rc_servo_send_pulse_normalized(0,0)==-1) return -1;
-	rc_usleep(duration/frequency_hz);
+//	rc_usleep(duration/frequency_hz);
   }
 	
  while(1){
@@ -224,8 +231,8 @@ int main(int argc, char **argv)
   index = 0;
   servo_pos = 0;
   servo_pos_l = 0;
-  double increment = step_size * sweep_limit / frequency_hz;
-  double increment_l = step_size_l * sweep_limit_l / frequency_hz;
+  increment = step_size * increment;
+  increment_l = step_size_l * increment_l;
   while(if_running){
 	//rc_enable_motors();
 	// send pulse
@@ -251,7 +258,7 @@ int main(int argc, char **argv)
 		direction_l = 1;
 	}
 	
-	ROS_INFO("Running!!! Servo pos = %f", servo_pos);
+//	ROS_INFO("Running!!! Servo pos = %f", servo_pos);
 	  
 	pos_front_left_upper = servo_pos;
 	pos_rear_left_upper = -servo_pos;
@@ -283,6 +290,7 @@ int main(int argc, char **argv)
 		servo_pos = -servo_pos; 
 	}
 */
+	ROS_INFO("Running!!! Servo pos = %f, Servo pos lower = %f", servo_pos, servo_pos_l);
 	ros::spinOnce();
 	r.sleep();
 //	rc_usleep(duration/frequency_hz);
