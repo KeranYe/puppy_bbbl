@@ -327,6 +327,7 @@ int main(int argc, char **argv)
 	}
 */
 	ROS_INFO("Running!!! Servo pos = %f, Servo pos lower = %f", servo_pos, servo_pos_l);
+	ROS_INFO("Running!!! Servo pos = %d, Servo pos lower = %d", servo_pos, servo_pos_l);
 //	ros::spinOnce();
 //	r.sleep();
 	rc_usleep(duration/frequency_hz);
