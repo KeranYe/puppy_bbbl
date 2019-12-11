@@ -238,7 +238,7 @@ int main(int argc, char **argv)
 //	else if(servo_pos < 10000){
 //		servo_pos = 10000;
 //		direction = 1;
-	}
+//	}
 	
 //	if(servo_pos_l>20000){
 //	if(servo_pos_l>sweep_limit_l){
